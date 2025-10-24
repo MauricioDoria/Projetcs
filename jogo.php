@@ -6,10 +6,10 @@ echo "Dejesa jogar:\n[1]SIM\n[0]NÂO:\n "; $op = (int)trim(fgets(STDIN));
 while ($op > 1){
     echo "Dejesa jogar: [1]SIM\n[0]NÂO: "; $op = (int)trim(fgets(STDIN));
 }
-#machineRes
+#machineRes == valor que a maquina recebe
 $machineRes = random_int(0, 10);
 
-#Operation
+#Operation | Operação
 while ($op == 1 and $op != 0){
     
     echo "Quantos dedos voce ira colocar: " ; $dedos =(int)trim(fgets(STDIN));
