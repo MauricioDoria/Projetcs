@@ -1,36 +1,23 @@
 <?php 
+echo 'Nome do cliente: '; $client = trim(fgets(STDIN));
 
-echo "JOGO DO PAR/IMPAR\n";
-echo "Dejesa jogar:\n[1]SIM\n[0]NÂO:\n "; $op = (int)trim(fgets(STDIN));
+echo 'Digite o Valor do produto: ' ; $product = (float)trim(fgets(STDIN));
+$itens = 1;
+echo "\nNovo Produto? Sim / Não : " . PHP_EOL ; $prodplus = strtoupper(trim(fgets(STDIN)));
 
-while ($op > 1){
-    echo "Dejesa jogar: [1]SIM\n[0]NÂO: "; $op = (int)trim(fgets(STDIN));
+
+while ($prodplus[0] != 'N' and $prodplus[0] == 'S'){
+    $itens++;
+    echo PHP_EOL . 'Digite o Valor do proximo produto: ' ; $productpro = (float)trim(fgets(STDIN));
+    $product+=$productpro;
+    echo 'Novo Produto? Sim / Não : ' . PHP_EOL ; $prodplus = strtoupper(trim(fgets(STDIN)));
+        
 }
-#machineRes == valor que a maquina recebe
-$machineRes = random_int(0, 10);
+$product = (float)$product ; 
 
-#Operation | Operação
-while ($op == 1 and $op != 0){
-    
-    echo "Quantos dedos voce ira colocar: " ; $dedos =(int)trim(fgets(STDIN));
-    if ($dedos > 10){
-        echo "Voce não pode colocar mais que 10 dedos" . PHP_EOL;
-        echo 'novamente...' . PHP_EOL; echo "Quantos dedos voce ira colocar: " ; $dedos =(int)trim(fgets(STDIN));
-    }
-    else {
-        $s = ($dedos + $machineRes)%2;
-        if ($s == 0){
-            $imp_par = 'Par';
-        } else {
-            $imp_par = 'Impar';
-        }
-        echo "Voce colocou $dedos e a maquina $machineRes o resultado é $imp_par " . PHP_EOL;
-    }
-    echo "\nQuer jogar novamente? [1]SIM\n[0]NÃO\n"; $op = $op = (int)trim(fgets(STDIN));
-    while ($op > 1){
-        echo 'Voce digitou uma opção indispovel...'. PHP_EOL;
-        echo "Dejesa jogar: [1]SIM\n[0]NÂO: "; $op = (int)trim(fgets(STDIN));
-    }
-}
-echo 'Obrigado por abrir este projeto';
+
+echo 'Fim de compra' . PHP_EOL;
+echo "Voce comprou $itens itens e ao todo sua compra deu $product reais";
+
+$prodplus = 's';
 ?>
