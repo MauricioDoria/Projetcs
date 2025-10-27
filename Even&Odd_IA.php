@@ -1,11 +1,38 @@
 <?php 
-
+$pointV = 0 ; $pointD = 0;
 echo "JOGO DO PAR/IMPAR\n";
-echo "Dejesa jogar:\n[1]SIM\n[0]NÂO:\n "; $op = (int)trim(fgets(STDIN));
-
-while ($op > 1){
-    echo "Dejesa jogar: [1]SIM\n[0]NÂO: "; $op = (int)trim(fgets(STDIN));
+echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $op = trim(fgets(STDIN));
+if(is_numeric($op)){
+    (int)$op;
 }
+elseif(is_string($op)){
+    if(strtoupper($op[0]) == 'S'){
+        $op = 1 ; 
+    } elseif (strtoupper($op[0]) == 'N'){
+        $op = 0 ;
+    }else{
+        $op = 3 ;
+        while ($op>1){
+            echo 'Tente novamente';
+            echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $op = trim(fgets(STDIN));
+            if (is_string($op)){
+                if(strtoupper($op[0]) == 'S'){
+                    $op = 1 ;
+                }
+                elseif (strtoupper($op[0]) == 'N'){
+                    $op = 0 ;
+                }
+                else {
+                    $op = 3 ;
+                }
+            }
+        }
+
+
+    }
+}
+
+
 #machineRes == valor que a maquina recebe
 $machineRes = random_int(0, 10);
 
@@ -24,13 +51,58 @@ while ($op == 1 and $op != 0){
         } else {
             $imp_par = 'Impar';
         }
-        echo "Voce colocou $dedos e a maquina $machineRes o resultado é $imp_par " . PHP_EOL;
     }
-    echo "\nQuer jogar novamente? [1]SIM\n[0]NÃO\n"; $op = $op = (int)trim(fgets(STDIN));
-    while ($op > 1){
-        echo 'Voce digitou uma opção indispovel...'. PHP_EOL;
-        echo "Dejesa jogar: [1]SIM\n[0]NÂO: "; $op = (int)trim(fgets(STDIN));
+        
+    #PLayer
+    echo 'Voce escolhe Impar ou Par : ' ; $playerRes = trim(fgets(STDIN));
+    if (strtoupper($playerRes[0]) == 'P'){
+        $playerRes = 'Par';
+    } elseif (strtoupper($playerRes[0]) == 'I'){
+        $playerRes = 'Impar';
+    }
+    echo $playerRes;
+    echo "Voce colocou $dedos e a maquina $machineRes o resultado é $imp_par " . PHP_EOL;
+    if($playerRes == $imp_par){
+        echo 'You Won' ; $pointV ++; 
+    }else{
+        echo 'You Lost' ; $pointD ++;
+    }
+    echo "\nQuer jogar novamente? [1]SIM | [0]NÃO : "; $op = $op = (int)trim(fgets(STDIN));
+    if(is_numeric($op)){
+        (int)$op;
+    }
+    elseif(is_string($op)){
+        if(strtoupper($op[0]) == 'S'){
+            $op = 1 ; 
+        } elseif (strtoupper($op[0]) == 'N'){
+            $op = 0 ;
+        }else{
+            $op = 3 ;
+            while ($op > 1){
+                echo 'Voce digitou uma opção indispovel...'. PHP_EOL;
+                echo "Dejesa jogar: [ 1 / S ]SIM | [0 / N]NÃO : "; $op = (int)trim(fgets(STDIN));
+                if (is_string($op)){
+                    if(strtoupper($op[0]) == 'S'){
+                        $op = 1 ;
+                    }
+                    elseif (strtoupper($op[0]) == 'N'){
+                        $op = 0 ;
+                    }
+                    else {
+                        $op = 3 ;
+                    }
+                }
+            }
+
+        }
     }
 }
+$saldo = 0;
+$saldo = $pointV - $pointD ;
+if ($saldo < 0){
+    $saldo =  0; echo ' Seu Saldo foi zerado por ter mais derrotas';
+}
+echo "Seu saldo é de $saldo ...\n" ;
 echo 'Obrigado por abrir este projeto';
+
 ?>
