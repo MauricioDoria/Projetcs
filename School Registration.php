@@ -55,12 +55,13 @@ if (is_string($op)){
                     elseif (strtoupper($op[0]) == 'S') {
                         while (strtoupper($op) != 'N'){
                             $media++;
-                            $nota+=$n;
                             echo "Nota $media: " ;$n=(float)trim(fgets(STDIN));
+                            $nota+=$n;
                             
                             echo 'MAIS UMA NOTA: [S] | [N] ' ; $op = trim(fgets(STDIN));
                             if(is_string($op)){
                                 if (strtoupper($op[0]) == 'N'){
+                                    unset($n);
                                     $n = $media;
                                     $media = $nota/$n;
 
@@ -96,6 +97,34 @@ if (is_string($op)){
     echo 'Texto Invalido: ' ; 
     echo "Adicionar MEDIA a aluno [S] | [N] " ; $op = trim(fgets(STDIN)); 
 }
+unset($alunomedia);
+#Verificar e Retornar valor:
+echo 'Consulta de Aluno especifico [S] | [N] : ' ; $op = trim(fgets(STDIN));
+if(is_string($op)){
+    if (strtoupper($op[0]) == 'S'){
+        echo 'Nome do Aluno : ' ; $alunomedia = trim(fgets(STDIN));
+        if (!isset($cadastro[$alunomedia])){
+            echo "O Aluno $alunomedia  não existe";    
+        } else {
+            foreach ($cadastro[$alunomedia] as $chave => $value) {
+                echo ucfirst($chave) . " : " . $value . PHP_EOL;
+            }
+        }
+    } elseif(strtoupper($op[0]) == 'N'){
+        echo PHP_EOL . "--- LISTA DE ALUNOS ---" . PHP_EOL;
 
-print_r($cadastro);
+        foreach ($cadastro as $aluno => $dados) {
+            echo "Aluno: $aluno" . PHP_EOL;
+            foreach ($dados as $chave => $valor) {
+                echo ucfirst($chave) . ": $valor" . PHP_EOL;
+            }
+            echo str_repeat("-", 25) . PHP_EOL; // separador visual
+        }
+
+
+
+
+        }
+}
+
 ?>
