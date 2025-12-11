@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body { background-color: #222; margin: 0; overflow: hidden; touch-action: none; display: flex; }
+        
+        /* Área do Volante (Esquerda) */
+        #area-volante { width: 50%; height: 100vh; position: relative; display: flex; justify-content: center; align-items: center; }
+        
+        /* O Volante Visual */
+        #volante {
+            width: 250px; height: 250px;
+            border-radius: 50%;
+            background: #ccc; /* Cinza */
+            border: 10px solid #999;
+            position: relative;
+            transform-origin: center center;
+        }
+        /* Marcador para ver a rotação */
+        #volante::after { content: ''; position: absolute; top: 0; left: 50%; width: 10px; height: 50px; background: #333; transform: translateX(-50%); }
+
+        /* Área dos Pedais (Direita) */
+        #area-pedais { width: 50%; height: 100vh; display: flex; flex-direction: row; justify-content: space-around; align-items: center; }
+        
+        .pedal { width: 100px; height: 200px; border-radius: 10px; border: 2px solid white; }
+        #freio { background-color: #d32f2f; } /* Vermelho */
+        #acelerador { background-color: #388e3c; } /* Verde */
+        
+        .pressionado { opacity: 0.5; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <div id="area-volante">
+        <div id="volante"></div>
+    </div>
+
+    <div id="area-pedais">
+        <div id="freio" class="pedal"></div>     
+        <div id="acelerador" class="pedal"></div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO ---
+        // TROQUE PELO IP DO SEU PC (Windows + R -> cmd -> ipconfig)
+        const IP_DO_PC = "123.456.789.00"; // <--- EDITE AQUI
+        const ws = new WebSocket(`ws://${IP_DO_PC}:8765`);
+
+        // Estado
+        let estado = { angulo: 0, acelerador: false, freio: false };
+        
+        // Elementos
+        const volanteEl = document.getElementById('volante');
+        const freioEl = document.getElementById('freio');
+        const acelEl = document.getElementById('acelerador');
+
+        // Lógica do Volante (Touch e Rotação)
+        let tocandoVolante = false;
+        
+        volanteEl.addEventListener('touchstart', (e) => { tocandoVolante = true; });
+        volanteEl.addEventListener('touchend', (e) => { 
+            tocandoVolante = false; 
+            atualizarVolante(0); // Reseta para o centro ao soltar
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!tocandoVolante) return;
+            
+            // Pega o toque
+            let touch = e.touches[0];
+            let rect = volanteEl.getBoundingClientRect();
+            let centroX = rect.left + rect.width / 2;
+            let centroY = rect.top + rect.height / 2;
+
+            // Matemática para calcular angulo baseado na posição do dedo
+            // Math.atan2 retorna radianos, convertemos para graus
+            let radianos = Math.atan2(touch.clientY - centroY, touch.clientX - centroX);
+            let graus = radianos * (180 / Math.PI);
+
+            // Ajuste porque 0 graus é as 3 horas, queremos 12 horas
+            graus = graus + 90; 
+
+            // Limitar rotação (Clamp) entre -90 e 90 graus
+            if (graus > 180) graus -= 360; // Trata a virada
+            if (graus < -90) graus = -90;
+            if (graus > 90) graus = 90;
+
+            atualizarVolante(graus);
+        }, { passive: false });
+
+        function atualizarVolante(graus) {
+            estado.angulo = graus;
+            // Visual
+            volanteEl.style.transform = `rotate(${graus}deg)`;
+            enviarDados();
+        }
+
+        // Lógica dos Pedais
+        acelEl.addEventListener('touchstart', (e) => { e.preventDefault(); estado.acelerador = true; acelEl.classList.add('pressionado'); enviarDados(); });
+        acelEl.addEventListener('touchend', (e) => { e.preventDefault(); estado.acelerador = false; acelEl.classList.remove('pressionado'); enviarDados(); });
+
+        freioEl.addEventListener('touchstart', (e) => { e.preventDefault(); estado.freio = true; freioEl.classList.add('pressionado'); enviarDados(); });
+        freioEl.addEventListener('touchend', (e) => { e.preventDefault(); estado.freio = false; freioEl.classList.remove('pressionado'); enviarDados(); });
+
+        // Envia para o Python
+        function enviarDados() {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify(estado));
+            }
+        }
+    </script>
+</body>
+</html>
