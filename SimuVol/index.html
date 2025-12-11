@@ -2,111 +2,289 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Simulador Mobile</title>
     <style>
-        body { background-color: #222; margin: 0; overflow: hidden; touch-action: none; display: flex; }
-        
-        /* Área do Volante (Esquerda) */
-        #area-volante { width: 50%; height: 100vh; position: relative; display: flex; justify-content: center; align-items: center; }
-        
-        /* O Volante Visual */
-        #volante {
-            width: 250px; height: 250px;
-            border-radius: 50%;
-            background: #ccc; /* Cinza */
-            border: 10px solid #999;
-            position: relative;
-            transform-origin: center center;
+        body { 
+            background-color: #1a1a1a; 
+            margin: 0; 
+            overflow: hidden; 
+            touch-action: none; 
+            font-family: sans-serif;
+            color: white;
         }
-        /* Marcador para ver a rotação */
-        #volante::after { content: ''; position: absolute; top: 0; left: 50%; width: 10px; height: 50px; background: #333; transform: translateX(-50%); }
 
-        /* Área dos Pedais (Direita) */
-        #area-pedais { width: 50%; height: 100vh; display: flex; flex-direction: row; justify-content: space-around; align-items: center; }
+        /* Container Principal */
+        #app {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            transition: all 0.3s;
+        }
+
+        /* Modos de visualização */
+        .horizontal { flex-direction: row; }
+        .vertical { flex-direction: column-reverse; }
+
+        /* Áreas */
+        #area-volante { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: #222;
+            position: relative;
+        }
         
-        .pedal { width: 100px; height: 200px; border-radius: 10px; border: 2px solid white; }
-        #freio { background-color: #d32f2f; } /* Vermelho */
-        #acelerador { background-color: #388e3c; } /* Verde */
+        #area-pedais { 
+            flex: 1; 
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center; 
+            background: #1a1a1a;
+        }
+
+        /* --- VISUAL DO VOLANTE --- */
+        #volante-base {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #333 40%, #000 60%, #111 70%);
+            border: 15px solid #444;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Faixa Vermelha (Centro) */
+        #marcador {
+            position: absolute;
+            top: -15px;
+            width: 20px;
+            height: 40px;
+            background-color: #d32f2f;
+            border-radius: 4px;
+            z-index: 10;
+        }
+        /* Centro do volante (Logo/Cubo) */
+        #cubo {
+            width: 80px;
+            height: 80px;
+            background: #555;
+            border-radius: 50%;
+            border: 2px solid #777;
+            z-index: 5;
+        }
+        /* Raios do volante */
+        .raio {
+            position: absolute;
+            background: #222;
+            z-index: 2;
+        }
+        .raio.horizontal { width: 100%; height: 40px; }
+        .raio.vertical { height: 50%; width: 40px; bottom: 0; }
+
+        /* Info de Graus */
+        #info-graus {
+            position: absolute;
+            bottom: 20px;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* --- PEDAIS --- */
+        .pedal { 
+            width: 35%; 
+            height: 70%; 
+            border-radius: 15px; 
+            border: 4px solid #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            transition: transform 0.1s;
+        }
+        #freio { background: linear-gradient(to bottom, #b71c1c, #d32f2f); box-shadow: 0 10px 0 #7f0000; }
+        #acelerador { background: linear-gradient(to bottom, #1b5e20, #388e3c); box-shadow: 0 10px 0 #003300; }
         
-        .pressionado { opacity: 0.5; transform: scale(0.95); }
+        .pressionado { 
+            transform: translateY(10px); 
+            box-shadow: 0 0 0 !important; 
+            opacity: 0.8;
+        }
+
+        /* --- BOTÃO DE MUDAR TELA --- */
+        #btn-layout {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            z-index: 100;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 <body>
 
-    <div id="area-volante">
-        <div id="volante"></div>
-    </div>
+    <button id="btn-layout" onclick="mudarLayout()">Girar Tela ⟳</button>
 
-    <div id="area-pedais">
-        <div id="freio" class="pedal"></div>     
-        <div id="acelerador" class="pedal"></div>
+    <div id="app" class="horizontal">
+        <div id="area-volante">
+            <div id="volante-base">
+                <div id="marcador"></div>
+                <div class="raio horizontal"></div>
+                <div class="raio vertical"></div>
+                <div id="cubo"></div>
+            </div>
+            <div id="info-graus">0°</div>
+        </div>
+
+        <div id="area-pedais">
+            <div id="freio" class="pedal">Freio</div>     
+            <div id="acelerador" class="pedal">Acel.</div>
+        </div>
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO ---
-        // TROQUE PELO IP DO SEU PC (Windows + R -> cmd -> ipconfig)
-        const IP_DO_PC = "123.456.789.00"; // <--- EDITE AQUI
+        // CONFIGURAÇÃO
+        const IP_DO_PC = "123.456.7.89"; // <--- COLOQUE SEU IP AQUI
         const ws = new WebSocket(`ws://${IP_DO_PC}:8765`);
 
-        // Estado
-        let estado = { angulo: 0, acelerador: false, freio: false };
-        
         // Elementos
-        const volanteEl = document.getElementById('volante');
-        const freioEl = document.getElementById('freio');
-        const acelEl = document.getElementById('acelerador');
-
-        // Lógica do Volante (Touch e Rotação)
-        let tocandoVolante = false;
+        const app = document.getElementById('app');
+        const volanteVisual = document.getElementById('volante-base');
+        const textoGraus = document.getElementById('info-graus');
+        const areaVolante = document.getElementById('area-volante');
         
-        volanteEl.addEventListener('touchstart', (e) => { tocandoVolante = true; });
-        volanteEl.addEventListener('touchend', (e) => { 
-            tocandoVolante = false; 
-            atualizarVolante(0); // Reseta para o centro ao soltar
+        // Variáveis de Lógica de Rotação
+        let anguloTotal = 0;
+        let ultimoAnguloDetectado = 0;
+        let tocando = false;
+        const LIMITE_ROTAÇÃO = 450; // 450 para cada lado (900 total)
+
+        // --- FUNÇÃO DE LAYOUT ---
+        function mudarLayout() {
+            if (app.classList.contains('horizontal')) {
+                app.classList.remove('horizontal');
+                app.classList.add('vertical');
+            } else {
+                app.classList.remove('vertical');
+                app.classList.add('horizontal');
+            }
+        }
+
+        // --- LÓGICA DO VOLANTE ---
+        areaVolante.addEventListener('touchstart', (e) => {
+            tocando = true;
+            let toque = e.touches[0];
+            ultimoAnguloDetectado = calcularAnguloToque(toque.clientX, toque.clientY);
+        });
+
+        areaVolante.addEventListener('touchend', () => {
+            tocando = false;
+            // Opcional: Auto-center (voltar ao meio sozinho)
+            // Se quiser que o volante fique onde parou, comente a linha abaixo:
+            animarRetornoAoCentro();
         });
 
         document.addEventListener('touchmove', (e) => {
-            if (!tocandoVolante) return;
+            if (!tocando) return;
+            e.preventDefault(); // Evita scroll da tela
+
+            let toque = e.touches[0];
+            let anguloAtual = calcularAnguloToque(toque.clientX, toque.clientY);
             
-            // Pega o toque
-            let touch = e.touches[0];
-            let rect = volanteEl.getBoundingClientRect();
-            let centroX = rect.left + rect.width / 2;
-            let centroY = rect.top + rect.height / 2;
+            // Calcula a diferença (Delta)
+            let delta = anguloAtual - ultimoAnguloDetectado;
 
-            // Matemática para calcular angulo baseado na posição do dedo
-            // Math.atan2 retorna radianos, convertemos para graus
-            let radianos = Math.atan2(touch.clientY - centroY, touch.clientX - centroX);
-            let graus = radianos * (180 / Math.PI);
+            // Corrige a passagem pelo ponto de corte (180 -> -180)
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
 
-            // Ajuste porque 0 graus é as 3 horas, queremos 12 horas
-            graus = graus + 90; 
+            anguloTotal += delta;
 
-            // Limitar rotação (Clamp) entre -90 e 90 graus
-            if (graus > 180) graus -= 360; // Trata a virada
-            if (graus < -90) graus = -90;
-            if (graus > 90) graus = 90;
+            // Trava nos limites (Simulação de fim de curso)
+            if (anguloTotal > LIMITE_ROTAÇÃO) anguloTotal = LIMITE_ROTAÇÃO;
+            if (anguloTotal < -LIMITE_ROTAÇÃO) anguloTotal = -LIMITE_ROTAÇÃO;
 
-            atualizarVolante(graus);
+            ultimoAnguloDetectado = anguloAtual;
+            atualizarVisual();
+            enviarDados();
         }, { passive: false });
 
-        function atualizarVolante(graus) {
-            estado.angulo = graus;
-            // Visual
-            volanteEl.style.transform = `rotate(${graus}deg)`;
-            enviarDados();
+        function calcularAnguloToque(x, y) {
+            let rect = volanteVisual.getBoundingClientRect();
+            let centroX = rect.left + rect.width / 2;
+            let centroY = rect.top + rect.height / 2;
+            
+            // Math.atan2(y, x) -> Retorna radianos
+            let rad = Math.atan2(y - centroY, x - centroX);
+            let deg = rad * (180 / Math.PI);
+            return deg;
         }
 
-        // Lógica dos Pedais
-        acelEl.addEventListener('touchstart', (e) => { e.preventDefault(); estado.acelerador = true; acelEl.classList.add('pressionado'); enviarDados(); });
-        acelEl.addEventListener('touchend', (e) => { e.preventDefault(); estado.acelerador = false; acelEl.classList.remove('pressionado'); enviarDados(); });
+        function atualizarVisual() {
+            // Gira o visual
+            volanteVisual.style.transform = `rotate(${anguloTotal}deg)`;
+            textoGraus.innerText = Math.round(anguloTotal) + "°";
+        }
 
-        freioEl.addEventListener('touchstart', (e) => { e.preventDefault(); estado.freio = true; freioEl.classList.add('pressionado'); enviarDados(); });
-        freioEl.addEventListener('touchend', (e) => { e.preventDefault(); estado.freio = false; freioEl.classList.remove('pressionado'); enviarDados(); });
+        function animarRetornoAoCentro() {
+            // Efeito simples de voltar suavemente
+            let intervalo = setInterval(() => {
+                if (tocando) { clearInterval(intervalo); return; }
+                
+                if (Math.abs(anguloTotal) < 1) {
+                    anguloTotal = 0;
+                    atualizarVisual();
+                    enviarDados();
+                    clearInterval(intervalo);
+                } else {
+                    anguloTotal = anguloTotal * 0.8; // Volta 20% a cada frame
+                    atualizarVisual();
+                    enviarDados();
+                }
+            }, 30);
+        }
 
-        // Envia para o Python
+        // --- LÓGICA PEDAIS ---
+        let estadoPedais = { acelerador: false, freio: false };
+        const btnAcel = document.getElementById('acelerador');
+        const btnFreio = document.getElementById('freio');
+
+        function configurarPedal(elem, tipo) {
+            elem.addEventListener('touchstart', (e) => { 
+                e.preventDefault(); 
+                elem.classList.add('pressionado'); 
+                estadoPedais[tipo] = true; 
+                enviarDados(); 
+            });
+            elem.addEventListener('touchend', (e) => { 
+                e.preventDefault(); 
+                elem.classList.remove('pressionado'); 
+                estadoPedais[tipo] = false; 
+                enviarDados(); 
+            });
+        }
+        configurarPedal(btnAcel, 'acelerador');
+        configurarPedal(btnFreio, 'freio');
+
+        // --- COMUNICAÇÃO ---
         function enviarDados() {
             if (ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify(estado));
+                let payload = {
+                    angulo: anguloTotal,
+                    acelerador: estadoPedais.acelerador,
+                    freio: estadoPedais.freio
+                };
+                ws.send(JSON.stringify(payload));
             }
         }
     </script>
