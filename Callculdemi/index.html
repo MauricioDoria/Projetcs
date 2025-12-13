@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Acordo Justo Trabalhista</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f5f5f5; margin:0; padding:20px; }
+    .container { max-width: 700px; margin:auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.1);} 
+    h1 { text-align:center; }
+    label { display:block; margin-top:15px; font-weight:bold; }
+    input { width:100%; padding:8px; margin-top:5px; }
+    button { margin-top:20px; width:100%; padding:12px; font-size:16px; background:#0d6efd; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+    button:hover { background:#084298; }
+    .result { margin-top:25px; background:#f1f8ff; padding:15px; border-radius:6px; }
+    .highlight { font-weight:bold; color:#0d6efd; }
+    footer { margin-top:30px; font-size:12px; color:#555; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculadora de Acordo Justo Trabalhista</h1>
+
+    <label>Salário bruto (R$)</label>
+    <input type="number" id="salario" />
+
+    <label>Meses trabalhados na empresa</label>
+    <input type="number" id="meses" />
+
+    <label>FGTS acumulado (R$)</label>
+    <input type="number" id="fgts" />
+
+    <label>Possui férias vencidas? (1 = Sim | 0 = Não)</label>
+    <input type="number" id="feriasVencidas" />
+
+    <button onclick="calcular()">Calcular Acordo</button>
+
+    <div class="result" id="resultado" style="display:none"></div>
+
+    <footer>
+      Cálculo estimado com base no Art. 484-A da CLT. Não substitui orientação jurídica.
+    </footer>
+  </div>
+
+  <script>
+    function calcular() {
+      const salario = Number(document.getElementById('salario').value);
+      const meses = Number(document.getElementById('meses').value);
+      const fgts = Number(document.getElementById('fgts').value);
+      const feriasVencidas = Number(document.getElementById('feriasVencidas').value);
+
+      const avisoPrevioDias = Math.min(90, 30 + Math.floor(meses / 12) * 3);
+      const avisoPrevio = (salario / 30) * avisoPrevioDias * 0.5;
+
+      const multaFgts = fgts * 0.20;
+      const decimoTerceiro = (salario / 12) * (meses % 12);
+      const feriasProp = salario * (meses % 12) / 12;
+      const tercoFerias = feriasProp / 3;
+      const feriasVencidasValor = feriasVencidas ? salario * 1.33 : 0;
+
+      const totalFuncionario = avisoPrevio + multaFgts + decimoTerceiro + feriasProp + tercoFerias + feriasVencidasValor;
+
+      const economiaEmpresa = (fgts * 0.40 - multaFgts) + avisoPrevio;
+
+      document.getElementById('resultado').style.display = 'block';
+      document.getElementById('resultado').innerHTML = `
+        <p>Total estimado para o funcionário: <span class="highlight">R$ ${totalFuncionario.toFixed(2)}</span></p>
+        <p>Economia estimada para a empresa: <span class="highlight">R$ ${economiaEmpresa.toFixed(2)}</span></p>
+        <hr>
+        <p><strong>Dica:</strong> Levar esses números para a empresa torna a negociação objetiva e profissional.</p>
+      `;
+    }
+  </script>
+</body>
+</html>
