@@ -2,7 +2,6 @@
 $opção  = ["PEDRA", "PAPEL", "TESOURA"];#Config IA
 $ia = random_int(0,2);
 if ($ia == 0){$ia='PEDRA';}elseif($ia == 1){$ia = 'PAPEL' ;}else{$ia = 'TESOURA';}
-echo $ia;
 
 echo 'O que irar jogar' . PHP_EOL;($player=(string)trim(fgets(STDIN)));
 $player = strtoupper($player);
