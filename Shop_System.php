@@ -1,23 +1,23 @@
 <?php 
 echo 'Nome do cliente: '; $client = trim(fgets(STDIN));
 
-echo 'Digite o Valor do produto: ' ; $product = (float)trim(fgets(STDIN));
-$itens = 1;
-echo "\nNovo Produto? Sim / Não : " . PHP_EOL ; $prodplus = strtoupper(trim(fgets(STDIN)));
+echo 'Digite o Valor do produto: ' ; $product_valor = (float)trim(fgets(STDIN));
+$number_itens = 1;
+echo "\nNovo Produto? Sim / Não : " . PHP_EOL ; $New_productOption = strtoupper(trim(fgets(STDIN)));
 
 
-while ($prodplus[0] != 'N' and $prodplus[0] == 'S'){
-    $itens++;
-    echo PHP_EOL . 'Digite o Valor do proximo produto: ' ; $productpro = (float)trim(fgets(STDIN));
-    $product+=$productpro;
-    echo 'Novo Produto? Sim / Não : ' . PHP_EOL ; $prodplus = strtoupper(trim(fgets(STDIN)));
+while ($New_productOption[0] != 'N' && $New_productOption[0] == 'S'){
+    $number_itens++;
+    echo PHP_EOL . 'Digite o Valor do proximo produto: ' ; $new_productOptionValor = (float)trim(fgets(STDIN));
+    $product_valor+=$new_productOptionValor;
+    echo 'Novo Produto? Sim / Não : ' . PHP_EOL ; $New_productOption = strtoupper(trim(fgets(STDIN)));
         
 }
-$product = (float)$product ; 
+$product_valor = (float)$product_valor ; 
 
 
 echo 'Fim de compra' . PHP_EOL;
-echo "Voce comprou $itens itens e ao todo sua compra deu $product reais";
+echo "Voce comprou $number_itens itens e ao todo sua compra deu $product_valor reais";
 
 #Payment System | Sistema de Pagamento
 
@@ -38,12 +38,12 @@ if ($paymentOp == 0){
 }
 elseif ($paymentOp == 2){
     echo "Using the store card you get 15% off on purchases over $50 and 10% off on purchases below that." . PHP_EOL;
-    if ($product > 50){
-        $product= $product-($product * 0.15);
+    if ($product_valor > 50){
+        $product_valor= $product_valor-($product_valor * 0.15);
     } else{ 
-        $product = $product-($product * 0.10);
+        $product_valor = $product_valor-($product_valor * 0.10);
     }
-    echo "The final value of your purchase was $product ";
+    echo "The final value of your purchase was $product_valor ";
 }
 
 echo 'Purchase completed...' . PHP_EOL . 'Thank the customer "Thank you for your preference"' ;
