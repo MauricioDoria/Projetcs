@@ -1,29 +1,31 @@
 <?php 
-$pointV = 0 ; $pointD = 0;
+#Victory === Pontos de Vitorias | Defeat = Derrotas
+$Victory = 0 ; $Defeat = 0;
 echo "JOGO DO PAR/IMPAR\n";
-echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $op = trim(fgets(STDIN));
-if(is_numeric($op)){
-    (int)$op;
+echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $Option_Menu = trim(fgets(STDIN)); #Opção do Menu
+
+if(is_numeric($Option_Menu) == true){
+    (int)$Option_Menu;
 }
-elseif(is_string($op)){
-    if(strtoupper($op[0]) == 'S'){
-        $op = 1 ; 
-    } elseif (strtoupper($op[0]) == 'N'){
-        $op = 0 ;
+elseif(is_string($Option_Menu) == true){
+    if(strtoupper($Option_Menu[0]) == 'S'){
+        $Option_Menu = 1 ; 
+    } elseif (strtoupper($Option_Menu[0]) == 'N'){
+        $Option_Menu = 0 ;
     }else{
-        $op = 3 ;
-        while ($op>1){
+        $Option_Menu = 3 ;
+        while ($Option_Menu>1){
             echo 'Tente novamente';
-            echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $op = trim(fgets(STDIN));
-            if (is_string($op)){
-                if(strtoupper($op[0]) == 'S'){
-                    $op = 1 ;
+            echo "Dejesa jogar: [ 1 / S ]SIM | [ 0 / N ]NÂO :  "; $Option_Menu = trim(fgets(STDIN));
+            if (is_string($Option_Menu) == true){
+                if(strtoupper($Option_Menu[0]) == 'S'){
+                    $Option_Menu = 1 ;
                 }
-                elseif (strtoupper($op[0]) == 'N'){
-                    $op = 0 ;
+                elseif (strtoupper($Option_Menu[0]) == 'N'){
+                    $Option_Menu = 0 ;
                 }
                 else {
-                    $op = 3 ;
+                    $Option_Menu = 3 ;
                 }
             }
         }
@@ -37,7 +39,7 @@ elseif(is_string($op)){
 $machineRes = random_int(0, 10);
 
 #Operation | Operação
-while ($op == 1 and $op != 0){
+while ($Option_Menu == 1 && $Option_Menu != 0){
     
     echo "Quantos dedos voce ira colocar: " ; $dedos =(int)trim(fgets(STDIN));
     if ($dedos > 10){
@@ -61,35 +63,35 @@ while ($op == 1 and $op != 0){
         $playerRes = 'Impar';
     }
     echo $playerRes;
-    echo "Voce colocou $dedos e a maquina $machineRes o resultado é $imp_par " . PHP_EOL;
+    echo "\nVoce colocou $dedos e a maquina $machineRes o resultado é $imp_par " . PHP_EOL;
     if($playerRes == $imp_par){
-        echo 'You Won' ; $pointV ++; 
+        echo 'You Won' ; $Victory ++; 
     }else{
-        echo 'You Lost' ; $pointD ++;
+        echo 'You Lost' ; $Defeat ++;
     }
-    echo "\nQuer jogar novamente? [1]SIM | [0]NÃO : "; $op = $op = (int)trim(fgets(STDIN));
-    if(is_numeric($op)){
-        (int)$op;
+    echo "\nQuer jogar novamente? [1]SIM | [0]NÃO : "; $Option_Menu = $Option_Menu = trim(fgets(STDIN));
+    if(is_numeric($Option_Menu) == true){
+        (int)$Option_Menu;
     }
-    elseif(is_string($op)){
-        if(strtoupper($op[0]) == 'S'){
-            $op = 1 ; 
-        } elseif (strtoupper($op[0]) == 'N'){
-            $op = 0 ;
+    elseif(is_string($Option_Menu) == true){
+        if(strtoupper($Option_Menu[0]) == 'S'){
+            $Option_Menu = 1 ; 
+        } elseif (strtoupper($Option_Menu[0]) == 'N'){
+            $Option_Menu = 0 ;
         }else{
-            $op = 3 ;
-            while ($op > 1){
-                echo 'Voce digitou uma opção indispovel...'. PHP_EOL;
-                echo "Dejesa jogar: [ 1 / S ]SIM | [0 / N]NÃO : "; $op = (int)trim(fgets(STDIN));
-                if (is_string($op)){
-                    if(strtoupper($op[0]) == 'S'){
-                        $op = 1 ;
+            $Option_Menu = 3 ;
+            while ($Option_Menu > 1){
+                echo PHP_EOL . 'Voce digitou uma opção indispovel...'. PHP_EOL;
+                echo "Dejesa jogar: [ 1 / S ]SIM | [0 / N]NÃO : "; $Option_Menu = trim(fgets(STDIN));
+                if (is_string($Option_Menu) == true){
+                    if(strtoupper($Option_Menu[0]) == 'S'){
+                        $Option_Menu = 1 ;
                     }
-                    elseif (strtoupper($op[0]) == 'N'){
-                        $op = 0 ;
+                    elseif (strtoupper($Option_Menu[0]) == 'N'){
+                        $Option_Menu = 0 ;
                     }
                     else {
-                        $op = 3 ;
+                        $Option_Menu = 3 ;
                     }
                 }
             }
@@ -98,11 +100,11 @@ while ($op == 1 and $op != 0){
     }
 }
 $saldo = 0;
-$saldo = $pointV - $pointD ;
+$saldo = $Victory - $Defeat ;
 if ($saldo < 0){
-    $saldo =  0; echo ' Seu Saldo foi zerado por ter mais derrotas';
+    $saldo =  0; echo PHP_EOL . 'Seu Saldo foi zerado por ter mais derrotas';
 }
-echo "Seu saldo é de $saldo ...\n" ;
+echo "\nSeu saldo é de $saldo ...\n" ;
 echo 'Obrigado por abrir este projeto';
 
 ?>
