@@ -1,22 +1,22 @@
 <?php 
-echo 'quantos até quando deseja contar : '; $cont = trim(fgets(STDIN));
-$par = 0;
-$impar = 0;
-$i= 0 ;
-while ($i <= $cont) { 
-    echo $i . PHP_EOL;
-    if ($i % 2 == 0){$par++;}
-    else {$impar++;}
-    $i++;
+echo 'NUMERO DE CONTAGEM: '; $number_count = trim(fgets(STDIN));
+$even_number = 0;#par
+$odd_number = 0;#impar
+$index= 0 ;#contagem
+while ($index <= $number_count) { 
+    echo $index . PHP_EOL;
+    if ($index % 2 == 0){$even_number++;}
+    else {$odd_number++;}
+    $index++;
 }
-$op = 5;
-while ($op > 1){
-    echo 'Voce deseja ver os numero [0]PARES ou [1]Impares' . PHP_EOL ; $op = trim(fgets(STDIN));
+$option = 5;
+while ($option > 1){
+    echo 'Voce deseja ver os numero [0]PARES ou [1]Impares' . PHP_EOL ; $option = trim(fgets(STDIN));
 
-    if ($op == 0){
-        echo "Entre 0 e $cont existem $par numeros pares";
-    } else if ($op == 1) {
-        echo "Entre 0 e $count existem $impar numeros impares";
+    if ($option == 0){
+        echo "Entre 0 e $number_count existem $even_number numeros pares";
+    } else if ($option == 1) {
+        echo "Entre 0 e $number_count existem $odd_number numeros impares";
     }
 }
 ?>
