@@ -1,22 +1,26 @@
 <?php
 
-$cond = 4 ;
 echo 'CALCULADORA ' . PHP_EOL ; echo 'DIGITE ...' ;
-while ($cond != 0 ){
+while (True){
     echo '' . PHP_EOL;
-    echo 'PRIMEIRO NUMERO --> ' ; $n1 = trim(fgets(STDIN));
-    echo 'SEGUNDO NUMERO --> '; $n2 = trim(fgets(STDIN));
-    echo "[1]SOMA\n[2]MULTIPLICAÇÂO\n[3]DIVISÂO\n\nOque voce deseja fazer: " ; $cond = trim(fgets(STDIN));
-    if ($cond == 1){
-        echo "O soma de $n1 +  $n2 é igual a " .  $n1+$n2;
-    } elseif ($cond == 2 ) {
-        echo "A multiplicação de $n1 x $n2 é igual a " . $n1*$n2;
-    } elseif ($cond == 3) {
-        echo "A Divisão entre $n1 / $n2 é igual a " . $n1/$n2;
-    } else{
-        $cond = 0;
+    echo 'PRIMEIRO NUMERO --> ' ; $Number1 = trim(fgets(STDIN));
+    echo 'SEGUNDO NUMERO --> '; $Number2 = trim(fgets(STDIN));
+    echo "[1]SOMA\n[2]MULTIPLICAÇÂO\n[3]DIVISÂO\n\nOque voce deseja fazer: " ; $OptionMenu= trim(fgets(STDIN));
+    while (is_numeric($OptionMenu) == false || $OptionMenu > 3 || $OptionMenu < 1){
+        echo 'Opção invalida... TENTE NOVAMENTE' . PHP_EOL;
+        echo "[1]SOMA\n[2]MULTIPLICAÇÂO\n[3]DIVISÂO\n\nOque voce deseja fazer: " ; $OptionMenu= trim(fgets(STDIN));
     }
-    echo PHP_EOL . "Deseja continuar\n[1]SIM\n[0]NÃO\n"; $cond = trim(fgets(STDIN));
+    if ($OptionMenu == 1){
+        echo "O soma de $Number1 +  $Number2 é igual a " .  $Number1+$Number2;
+    } elseif ($OptionMenu == 2 ) {
+        echo "A multiplicação de $Number1 x $Number2 é igual a " . $Number1*$Number2;
+    } elseif ($OptionMenu == 3) {
+        echo "A Divisão entre $Number1 / $Number2 é igual a " . $Number1/$Number2;
+    }
+    echo PHP_EOL . "Deseja continuar\n[Y]SIM\n[N]NÃO\n"; $OptionLoop= strtoupper(trim(fgets(STDIN)));
+    if ($OptionLoop[0] == 'N'){
+        break;
+    }
 }
 
 echo 'Obrigado por usar'
