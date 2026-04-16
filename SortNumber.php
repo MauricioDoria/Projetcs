@@ -3,8 +3,7 @@ function mensagem($msg){
     print ($msg . PHP_EOL);
 }
 $NumberSort = random_int(0,10);
-echo 'TENTE ADVINHAR UM NUMERO DE 0 A 10' . PHP_EOL;
-echo 'Tente advinhar o numero com 5 Tentativas' . PHP_EOL;
+mensagem('TENTE ADVINHAR UM NUMERO DE 0 A 10') ; mensagem('Tente advinhar o numero com 5 Tentativas');
 $Contagem = 1 ; 
 while (true){
     
@@ -12,27 +11,27 @@ while (true){
     if(is_numeric($tentativa) and $tentativa >= 0 and $tentativa <= 10){
         if ($tentativa < 10){
             if ($tentativa == $NumberSort){
-                echo 'Você acertou o numero' . PHP_EOL ;
+                mensagem('Você acertou o numero') ;
                 break;
             }
             else{
-                echo 'Tente Novamente...' .PHP_EOL;
-                echo 'Voce tem mais ' . 5-$Contagem . ' tentativas' . PHP_EOL;
+                mensagem('Tente Novamente...');
+                mensagem('Voce tem mais ' . 5-$Contagem . ' tentativas');
             $Contagem++;
             }
         }
         else {
-            echo "\nO numero Digitado precisar ser menor que 10: " . PHP_EOL;
+           mensagem('O numero Digitado precisar ser menor que 10: ');
         }
         
     }
     else{
-        echo 'Numero invalido... tente novamente: ' . PHP_EOL;
+        mensagem('Numero invalido... tente novamente: ');
         echo "$Contagem ª TENTATIVA : " ; $tentativa = (int)trim(fgets(STDIN));
         $Contagem++;
     }
     if ($Contagem > 5){
-        echo 'Voce usou todas as suas chances' . PHP_EOL;
+        mensagem('Voce usou todas as suas chances');
         break;
     }
 }
