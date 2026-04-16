@@ -49,6 +49,6 @@ elseif ($paymentOp == 2){
     echo "The final value of your purchase was $product_valor ";
 }
 
-mensagem("Using the store card you get 15% off on purchases over $50 and 10% off on purchases below that.") ; echo 'Thank the customer "Thank you for your preference"' ;
+mensagem('Purchase completed...') ; echo 'Thank the customer "Thank you for your preference"' ;
 
 ?>
