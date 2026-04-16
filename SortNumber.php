@@ -1,5 +1,7 @@
 <?php 
-
+function mensagem($msg){
+    print ($msg . PHP_EOL);
+}
 $NumberSort = random_int(0,10);
 echo 'TENTE ADVINHAR UM NUMERO DE 0 A 10' . PHP_EOL;
 echo 'Tente advinhar o numero com 5 Tentativas' . PHP_EOL;
@@ -19,8 +21,8 @@ while (true){
             $Contagem++;
             }
         }
-        else{
-            echo "\nO numero Digitado precisar ser maior menor que 10: " . PHP_EOL;
+        else {
+            echo "\nO numero Digitado precisar ser menor que 10: " . PHP_EOL;
         }
         
     }
