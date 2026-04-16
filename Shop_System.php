@@ -1,23 +1,26 @@
 <?php 
-echo 'Nome do cliente: '; $client = trim(fgets(STDIN));
+function mensagem($msg){
+    print($msg . PHP_EOL);
+}
 
-echo 'Digite o Valor do produto: ' ; $product_valor = (float)trim(fgets(STDIN));
+mensagem('Nome do cliente: '); $client = trim(fgets(STDIN));
+mensagem('Digite o Valor do produto: ') ; $product_valor = (float)trim(fgets(STDIN));
 $number_itens = 1;
-echo "\nNovo Produto? Sim / Não : " . PHP_EOL ; $New_productOption = strtoupper(trim(fgets(STDIN)));
+mensagem('Novo Produto? Sim / Não : ') ; $New_productOption = strtoupper(trim(fgets(STDIN)));
 
 
 while ($New_productOption[0] != 'N' && $New_productOption[0] == 'S'){
     $number_itens++;
     echo PHP_EOL . 'Digite o Valor do proximo produto: ' ; $new_productOptionValor = (float)trim(fgets(STDIN));
     $product_valor+=$new_productOptionValor;
-    echo 'Novo Produto? Sim / Não : ' . PHP_EOL ; $New_productOption = strtoupper(trim(fgets(STDIN)));
+    mensagem('Novo Produto? Sim / Não : ') ; $New_productOption = strtoupper(trim(fgets(STDIN)));
         
 }
 $product_valor = (float)$product_valor ; 
 
+mensagem('Fim de compra');
 
-echo 'Fim de compra' . PHP_EOL;
-echo "Voce comprou $number_itens itens e ao todo sua compra deu $product_valor reais";
+mensagem("Voce comprou $number_itens itens e ao todo sua compra deu $product_valor reais");
 
 #Payment System | Sistema de Pagamento
 
