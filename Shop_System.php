@@ -24,11 +24,11 @@ mensagem("Voce comprou $number_itens itens e ao todo sua compra deu $product_val
 
 #Payment System | Sistema de Pagamento
 
-echo "Qual a forma de pagamento :\n[0] Credit Card / Debit Card\n[1] Cash Payment\n[2] Store Card : "; $paymentOp = (int)trim(fgets(STDIN));
+mensagem("Qual a forma de pagamento :\n[0] Credit Card / Debit Card\n[1] Cash Payment\n[2] Store Card : "); $paymentOp = (int)trim(fgets(STDIN));
 
 while ($paymentOp != 0 && $paymentOp != 1 && $paymentOp != 2){
-    echo 'Opção INvalida';
-    echo "Qual a forma de pagamento :\n[0] Credit Card / Debit Card\n[1] Cash Payment\n[2] Store Card : "; $paymentOp = (int)trim(fgets(STDIN));
+    mensagem('Opção INvalida');
+    mensagem("Qual a forma de pagamento :\n[0] Credit Card / Debit Card\n[1] Cash Payment\n[2] Store Card : "); $paymentOp = (int)trim(fgets(STDIN));
 
 }
 if ($paymentOp == 0){
@@ -40,7 +40,7 @@ if ($paymentOp == 0){
     }
 }
 elseif ($paymentOp == 2){
-    echo "Using the store card you get 15% off on purchases over $50 and 10% off on purchases below that." . PHP_EOL;
+    mensagem("Using the store card you get 15% off on purchases over $50 and 10% off on purchases below that.");
     if ($product_valor > 50){
         $product_valor= $product_valor-($product_valor * 0.15);
     } else{ 
@@ -49,6 +49,6 @@ elseif ($paymentOp == 2){
     echo "The final value of your purchase was $product_valor ";
 }
 
-echo 'Purchase completed...' . PHP_EOL . 'Thank the customer "Thank you for your preference"' ;
+mensagem("Using the store card you get 15% off on purchases over $50 and 10% off on purchases below that.") . 'Thank the customer "Thank you for your preference"' ;
 
 ?>
